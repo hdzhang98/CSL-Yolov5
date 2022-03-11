@@ -1,2 +1,9 @@
 # CSL-Yolov5
-We will gradually upload code and models around March 10
+Environment：
+python==3.8.12    
+pytorch==1.6.0
+pip install -r requirements.txt    
+
+Detect：
+Run detect.py
+
