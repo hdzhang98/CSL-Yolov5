@@ -349,18 +349,18 @@ def rotate_nms(dets, scores, thresh):
         order = order[idx + 1]
     return keep
 
-
 def polygon_iou(boxes1, boxes2):
     polygon1 = shapely.geometry.Polygon(boxes1.reshape(4, 2)).convex_hull
     polygon2 = shapely.geometry.Polygon(boxes2.reshape(4, 2)).convex_hull
     if polygon1.intersects(polygon2):
         inter = polygon1.intersection(polygon2).area
         union = polygon1.union(polygon2).area
+        if union == 0:
+            return 0
         iou = inter / union
     else:
         iou = 0
     return iou
-
 
 def rotate_non_max_suppression(prediction, conf_thres=0.1, iou_thres=0.6, classes=None, agnostic=False, without_iouthres=False):
     # prediction :(batch_size, num_boxes, [xywh,score,num_classes,num_angles])
@@ -496,12 +496,16 @@ def write_txt(rbox, classname, conf, img_name, out_path, pi_format=False):
 
     if pi_format:  # θ∈[-pi/2,pi/2)
         rbox[-1] = (rbox[-1] * 180 / np.pi) + 90  # θ∈[0,179]
-    poly = longsideformat2point(rbox[0], rbox[1], rbox[2], rbox[3], rbox[4])
+    rect = ((rbox[0], rbox[1]), (rbox[2], rbox[3]), rbox[4])
+    # poly = [(x1,y1),(x2,y2),(x3,y3),(x4,y4)]
+    poly = np.float32(cv2.boxPoints(rect))
+    poly = np.int0(poly).reshape(8)
     lines = img_name + ' ' + conf + ' ' + ' '.join(list(map(str, poly))) + ' ' + classname
     if not os.path.exists(out_path):
         os.makedirs(out_path)  # make new output folder
 
     with open(str(out_path + '/' + img_name) + '.txt', 'a') as f:
         f.writelines(lines + '\n')
+
 
 
