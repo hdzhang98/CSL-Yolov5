@@ -468,26 +468,43 @@ def point2longsideformat(x_c, y_c, width, height, theta):
     return x_c, y_c, longside, shortside, theta_longside
 
 
-def draw_box(rbox, img, color=None, label=None, line_thickness=None, pi_format=True):
+def draw_box(rbox, img, cls, color=None, label=None, line_thickness=None, pi_format=True):
     if isinstance(rbox, torch.Tensor):
         rbox = rbox.cpu().float().numpy()
 
-    tl = line_thickness or round(0.002 * (img.shape[0] + img.shape[1]) / 2) + 1  # line/font thickness
-    color = color or [random.randint(0, 255) for _ in range(3)]
-    # rbox = np.array(x)
     if pi_format:  # θ∈[-pi/2,pi/2)
         rbox[-1] = (rbox[-1] * 180 / np.pi) + 90  # θ∈[0,179]
-    # rect=[(x_c,y_c),(w,h),Θ] Θ:flaot[0-179]  -> (-180,0)
     rect = ((rbox[0], rbox[1]), (rbox[2], rbox[3]), rbox[4])
-    # poly = [(x1,y1),(x2,y2),(x3,y3),(x4,y4)]
     poly = np.float32(cv2.boxPoints(rect))
     poly = np.int0(poly)
-    cv2.drawContours(image=img, contours=[poly], contourIdx=-1, color=color, thickness=2*tl)
-    c1 = (int(rbox[0]), int(rbox[1]))
-    if label:
-        tf = max(tl - 1, 1)  # font thickness
-        t_size = cv2.getTextSize(label, 0, fontScale=tl / 4, thickness=tf)[0]
-        c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
+    point0 = (poly[0][0], poly[0][1])
+    point1 = (poly[1][0], poly[1][1])
+    point2 = (poly[2][0], poly[2][1])
+    point3 = (poly[3][0], poly[3][1])
+    side1 = (poly[0][0]-poly[1][0]) * (poly[0][0]-poly[1][0]) + (poly[0][1]-poly[1][1]) * (poly[0][1]-poly[1][1])
+    side2 = (poly[0][0] - poly[3][0]) * (poly[0][0] - poly[3][0]) + (poly[0][1] - poly[3][1]) * (poly[0][1] - poly[3][1])
+    if side1 > side2:
+        if cls == 'longside':
+            cv2.line(img, point1, point0, color=(255, 0, 0), thickness=2)
+            cv2.line(img, point2, point1, color=(0, 0, 255), thickness=2)
+            cv2.line(img, point3, point2, color=(255, 0, 0), thickness=2)
+            cv2.line(img, point3, point0, color=(0, 0, 255), thickness=2)
+        else:
+            cv2.line(img, point1, point0, color=(0, 0, 255), thickness=2)
+            cv2.line(img, point2, point1, color=(255, 0, 0), thickness=2)
+            cv2.line(img, point3, point2, color=(0, 0, 255), thickness=2)
+            cv2.line(img, point3, point0, color=(255, 0, 0), thickness=2)
+    else:
+        if cls == 'longside':
+            cv2.line(img, point1, point0, color=(255, 0, 0), thickness=2)
+            cv2.line(img, point2, point1, color=(0, 0, 255), thickness=2)
+            cv2.line(img, point3, point2, color=(255, 0, 0), thickness=2)
+            cv2.line(img, point3, point0, color=(0, 0, 255), thickness=2)
+        else:
+            cv2.line(img, point1, point0, color=(0, 0, 255), thickness=2)
+            cv2.line(img, point2, point1, color=(255, 0, 0), thickness=2)
+            cv2.line(img, point3, point2, color=(0, 0, 255), thickness=2)
+            cv2.line(img, point3, point0, color=(255, 0, 0), thickness=2)
 
 
 def write_txt(rbox, classname, conf, img_name, out_path, pi_format=False):

@@ -86,7 +86,7 @@ def detect():
                         classname = '%s' % names[int(cls)]
                         conf_str = '%.3f' % conf
                         write_txt(rbox, classname, conf_str, Path(p).stem, str(out + '/result_txt'))
-                        draw_box(rbox, im0, label=label, color=colors[int(cls)], line_thickness=1,
+                        draw_box(rbox, im0, classname, label=label, color=colors[int(cls)], line_thickness=1,
                                  pi_format=False)
             # Print time (inference + NMS)
             print('%sDone. (%.3fs)' % (s, t2 - t1))
