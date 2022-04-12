@@ -1,6 +1,6 @@
-4_3c603c6afcbdba7b4da5feafe6f1c8fc 0.352 394 306 398 330 329 341 325 317 longside
-4_3c603c6afcbdba7b4da5feafe6f1c8fc 0.371 397 322 400 349 326 357 323 330 longside
-4_3c603c6afcbdba7b4da5feafe6f1c8fc 0.441 393 288 398 315 322 327 317 300 longside
-4_3c603c6afcbdba7b4da5feafe6f1c8fc 0.482 327 274 372 267 384 345 339 352 longside
-4_3c603c6afcbdba7b4da5feafe6f1c8fc 0.533 386 273 390 300 323 310 319 283 longside
-4_3c603c6afcbdba7b4da5feafe6f1c8fc 0.616 401 334 407 377 330 389 324 346 longside
+4_3c603c6afcbdba7b4da5feafe6f1c8fc 0.352 394 306 398 330 329 341 325 317 ShortSide_forGripper
+4_3c603c6afcbdba7b4da5feafe6f1c8fc 0.371 397 322 400 349 326 357 323 330 ShortSide_forGripper
+4_3c603c6afcbdba7b4da5feafe6f1c8fc 0.441 393 288 398 315 322 327 317 300 ShortSide_forGripper
+4_3c603c6afcbdba7b4da5feafe6f1c8fc 0.482 327 274 372 267 384 345 339 352 ShortSide_forGripper
+4_3c603c6afcbdba7b4da5feafe6f1c8fc 0.533 386 273 390 300 323 310 319 283 ShortSide_forGripper
+4_3c603c6afcbdba7b4da5feafe6f1c8fc 0.616 401 334 407 377 330 389 324 346 ShortSide_forGripper

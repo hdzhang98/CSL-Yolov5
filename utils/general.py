@@ -481,30 +481,16 @@ def draw_box(rbox, img, cls, color=None, label=None, line_thickness=None, pi_for
     point1 = (poly[1][0], poly[1][1])
     point2 = (poly[2][0], poly[2][1])
     point3 = (poly[3][0], poly[3][1])
-    side1 = (poly[0][0]-poly[1][0]) * (poly[0][0]-poly[1][0]) + (poly[0][1]-poly[1][1]) * (poly[0][1]-poly[1][1])
-    side2 = (poly[0][0] - poly[3][0]) * (poly[0][0] - poly[3][0]) + (poly[0][1] - poly[3][1]) * (poly[0][1] - poly[3][1])
-    if side1 > side2:
-        if cls == 'longside':
-            cv2.line(img, point1, point0, color=(255, 0, 0), thickness=2)
-            cv2.line(img, point2, point1, color=(0, 0, 255), thickness=2)
-            cv2.line(img, point3, point2, color=(255, 0, 0), thickness=2)
-            cv2.line(img, point3, point0, color=(0, 0, 255), thickness=2)
-        else:
-            cv2.line(img, point1, point0, color=(0, 0, 255), thickness=2)
-            cv2.line(img, point2, point1, color=(255, 0, 0), thickness=2)
-            cv2.line(img, point3, point2, color=(0, 0, 255), thickness=2)
-            cv2.line(img, point3, point0, color=(255, 0, 0), thickness=2)
+    if cls == 'longside':
+        cv2.line(img, point1, point0, color=(255, 0, 0), thickness=2)
+        cv2.line(img, point2, point1, color=(0, 0, 255), thickness=2)
+        cv2.line(img, point3, point2, color=(255, 0, 0), thickness=2)
+        cv2.line(img, point3, point0, color=(0, 0, 255), thickness=2)
     else:
-        if cls == 'longside':
-            cv2.line(img, point1, point0, color=(255, 0, 0), thickness=2)
-            cv2.line(img, point2, point1, color=(0, 0, 255), thickness=2)
-            cv2.line(img, point3, point2, color=(255, 0, 0), thickness=2)
-            cv2.line(img, point3, point0, color=(0, 0, 255), thickness=2)
-        else:
-            cv2.line(img, point1, point0, color=(0, 0, 255), thickness=2)
-            cv2.line(img, point2, point1, color=(255, 0, 0), thickness=2)
-            cv2.line(img, point3, point2, color=(0, 0, 255), thickness=2)
-            cv2.line(img, point3, point0, color=(255, 0, 0), thickness=2)
+        cv2.line(img, point1, point0, color=(0, 0, 255), thickness=2)
+        cv2.line(img, point2, point1, color=(255, 0, 0), thickness=2)
+        cv2.line(img, point3, point2, color=(0, 0, 255), thickness=2)
+        cv2.line(img, point3, point0, color=(255, 0, 0), thickness=2)
 
 
 def write_txt(rbox, classname, conf, img_name, out_path, pi_format=False):
@@ -517,7 +503,10 @@ def write_txt(rbox, classname, conf, img_name, out_path, pi_format=False):
     # poly = [(x1,y1),(x2,y2),(x3,y3),(x4,y4)]
     poly = np.float32(cv2.boxPoints(rect))
     poly = np.int0(poly).reshape(8)
-    lines = img_name + ' ' + conf + ' ' + ' '.join(list(map(str, poly))) + ' ' + classname
+    if classname == 'longside':
+        lines = img_name + ' ' + conf + ' ' + ' '.join(list(map(str, poly))) + ' ' + 'ShortSide_forGripper'
+    else:
+        lines = img_name + ' ' + conf + ' ' + ' '.join(list(map(str, poly))) + ' ' + 'LongSide_forGripper'
     if not os.path.exists(out_path):
         os.makedirs(out_path)  # make new output folder
 
